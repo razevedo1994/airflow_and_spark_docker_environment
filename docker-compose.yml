@@ -51,7 +51,7 @@ services:
         max-file: "5"
         max-size: "10m"
     ports:
-      - "32766:8082"
+      - "8082:8082"
       - "32765:7077"
     volumes:
       - ./mnt/spark/apps:/opt/spark-apps
@@ -74,7 +74,7 @@ services:
     depends_on:
       - spark-master
     ports:
-      - "32764:8081"
+      - "8081:8081"
     volumes:
       - ./mnt/spark/apps:/opt/spark-apps
       - ./mnt/spark/data:/opt/spark-data
