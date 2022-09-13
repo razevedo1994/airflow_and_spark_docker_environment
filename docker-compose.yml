@@ -42,8 +42,9 @@ services:
   ######################################################
   spark-master:
     build: ./docker/spark/spark-master
-    restart: always
+    image: azevedo/spark-master
     container_name: spark-master
+    restart: always
     logging:
       driver: "json-file"
       options:
@@ -61,8 +62,10 @@ services:
       interval: 10s
       retries: 10
 
-  spark-worker:
+  spark-worker-1:
     build: ./docker/spark/spark-worker
+    image: azevedo/spark-worker-1
+    container_name: spark-worker-1
     logging:
       driver: "json-file"
       options:
@@ -84,11 +87,11 @@ services:
   ######################################################
   # AIRFLOW
   ######################################################
-
   airflow:
     build: ./docker/airflow
-    restart: always
+    image: azevedo/airflow-2.3.4
     container_name: airflow
+    restart: always
     volumes:
       - ./airflow_repository/airflow.cfg:/opt/airflow/airflow.cfg
       - ./airflow_repository/dags:/opt/airflow/dags
@@ -103,9 +106,6 @@ services:
 ######################################################
 # NETWORK
 ######################################################
-
-# Change name of default network otherwise URI invalid for HIVE
-# because of the _ contained by default network
 networks:
   default:
     name: airflow-network
