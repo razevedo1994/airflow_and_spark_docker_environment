@@ -42,7 +42,7 @@ services:
   ######################################################
   spark-master:
     build: ./docker/spark/spark-master
-    image: azevedo/spark-master
+    image: spark-master
     container_name: spark-master
     restart: always
     logging:
@@ -64,7 +64,7 @@ services:
 
   spark-worker-1:
     build: ./docker/spark/spark-worker
-    image: azevedo/spark-worker-1
+    image: spark-worker-1
     container_name: spark-worker-1
     logging:
       driver: "json-file"
@@ -89,7 +89,7 @@ services:
   ######################################################
   airflow:
     build: ./docker/airflow
-    image: azevedo/airflow-2.3.4
+    image: airflow-2.3.4
     container_name: airflow
     restart: always
     volumes:
