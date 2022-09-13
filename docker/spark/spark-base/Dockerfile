@@ -15,7 +15,7 @@ ENV PATH $SPARK_HOME/bin/:$PATH
 # Upgrade and install some tools and dependencies
 RUN apt-get update -yqq && \
     apt-get upgrade -yqq && \
-    apt-get install -yqq \
+    apt-get install -yqq --no-install-recommends \
     netcat \
     apt-utils \
     curl \
@@ -23,12 +23,10 @@ RUN apt-get update -yqq && \
     ssh \
     net-tools \
     ca-certificates \
+    iputils-ping \
     jq \
     wget \
-    software-properties-common
-
-# Adding dependencies for PySpark
-RUN pip install pyspark==${SPARK_VERSION}
+    telnet
 
 # Installing Spark
 WORKDIR ${SPARK_HOME}
@@ -45,6 +43,7 @@ RUN apt-get autoremove -yqq --purge && \
     apt-get clean && \
     rm -rf /tmp/* /var/tmp/*
 
+# Install Java
 RUN apt install default-jre -yqq
 
 ENV JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
