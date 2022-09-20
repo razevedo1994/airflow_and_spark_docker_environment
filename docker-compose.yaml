@@ -1,19 +1,11 @@
 version: '3'
 x-airflow-common:
-  # In order to add custom dependencies or upgrade provider packages you can use your extended image.
-  # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
-  # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-
-  # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.3.4}
   &airflow-common
   build: .
-  networks:
-    - default_network
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    # For backward compatibility, with Airflow <2.3
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
@@ -37,8 +29,6 @@ x-airflow-common:
 services:
   postgres:
     image: postgres:13
-    networks:
-      - default_network
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -53,8 +43,6 @@ services:
 
   redis:
     image: redis:latest
-    networks:
-      - default_network
     expose:
       - 6379
     healthcheck:
@@ -67,8 +55,6 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
-    networks:
-      - default_network
     ports:
       - 8080:8080
     healthcheck:
@@ -91,8 +77,6 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
-    networks:
-      - default_network
     healthcheck:
       test:
         [
@@ -111,8 +95,6 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
-    networks:
-      - default_network
     healthcheck:
       test:
         - "CMD-SHELL"
@@ -134,8 +116,6 @@ services:
   airflow-triggerer:
     <<: *airflow-common
     command: triggerer
-    networks:
-      - default_network
     healthcheck:
       test:
         [
@@ -267,8 +247,6 @@ services:
     image: bitnami/spark:latest
     user: root # Run container as root container: https://docs.bitnami.com/tutorials/work-with-non-root-containers/
     hostname: spark
-    networks:
-      - default_network
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -285,8 +263,6 @@ services:
   spark-worker-1:
     image: bitnami/spark
     user: root
-    networks:
-      - default_network
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark:7077
@@ -305,4 +281,5 @@ volumes:
 
 
 networks:
-  default_network:
+  default:
+    name: default_network
