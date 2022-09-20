@@ -19,6 +19,8 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 
 USER airflow
 
+COPY ./requirements.txt .
+
 RUN pip install --upgrade pip && \
-    pip install apache-airflow-providers-apache-spark==3.0.0
+    pip install -r requirements.txt
 
