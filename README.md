@@ -67,8 +67,17 @@ chmod +x ./build_environment.sh ./reset_environment.sh
 - Create this connection on Airflow:
 ![Spark master](./images/spark_connection.png)
 
+- To access Airflow UI:
+```
+http://localhost:8080/
+```
 
-- **Attention**: If you want to clean up your environment run `./reset_environment.sh` . But be careful, this command will delete all your images and containers.
+- To access Spark Master UI:
+```
+http://localhost:8181/
+```
+
+ **Attention**: If you want to clean up your environment run `./reset_environment.sh` . But be careful, this command will delete all your images and containers.
 
 
 ## Project Status
